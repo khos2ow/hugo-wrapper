@@ -157,8 +157,8 @@ download_version() {
             versionToDownload=`parse_json "$latest_release" "tag_name"`
         fi
 
-        # string down 'v' from begining of the string if exists
-        versionToDownload=`echo $versionToDownload | sed -ne 's/[^0-9]*\(\([0-9]*\.\)\{0,4\}[0-9]*[^.]\).*/\1/p')`
+        # strip down 'v' from begining of the string if exists
+        versionToDownload=`echo $versionToDownload | sed -ne 's/[^0-9]*\(\([0-9]*\.\)\{0,4\}[0-9]*[^.]\).*/\1/p'`
 
         printf "downloading hugo binary version v${versionToDownload} ... "
 
@@ -215,7 +215,7 @@ if [ -r "$BASE_DIR/.hugo/hugo" ]; then
         fi
      elif [ $get_latest = true ]; then
         latest_release=`$DOWNLOAD_COMMAND $DOWNLOAD_SILENT https://api.github.com/repos/gohugoio/hugo/releases/latest`
-        latest_version=`parse_json "$latest_release" "tag_name" | sed -ne 's/[^0-9]*\(\([0-9]*\.\)\{0,4\}[0-9]*[^.]\).*/\1/p')`
+        latest_version=`parse_json "$latest_release" "tag_name" | sed -ne 's/[^0-9]*\(\([0-9]*\.\)\{0,4\}[0-9]*[^.]\).*/\1/p'`
 
         if [ "$latest_version" != "$current_binary_version" ]; then
             # latest hugo version
