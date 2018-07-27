@@ -157,7 +157,7 @@ download_version() {
             versionToDownload=`parse_json "$latest_release" "tag_name"`
         fi
 
-        # string down 'v' from begining of the string if exists
+        # strip down 'v' from begining of the string if exists
         versionToDownload=`echo $versionToDownload | sed -ne 's/[^0-9]*\(\([0-9]*\.\)\{0,4\}[0-9]*[^.]\).*/\1/p'`
 
         printf "downloading hugo binary version v${versionToDownload} ... "
