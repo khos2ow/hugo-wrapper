@@ -1,0 +1,4 @@
+public/
+
+.hugo/*
+!.hugo/version
