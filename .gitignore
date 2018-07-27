@@ -1,2 +1,3 @@
 .vscode
-.hugo
+.hugo/*
+!.hugo/version
