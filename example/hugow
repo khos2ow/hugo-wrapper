@@ -27,6 +27,7 @@ set -e
 # hugo-wrapper command available flags
 get_version=""
 get_latest=false
+upgrade=false
 show_help=false
 
 # hugo related commands to pass through the actual binary
@@ -36,6 +37,7 @@ while [ -n "$1" ]; do
     case "$1" in
         --get-version) get_version=$2;  shift 2 ;;
         --get-latest)  get_latest=true; shift 1 ;;
+        --upgrade)     upgrade=true;    shift 1 ;;
         -h | --help)   show_help=true;  shift 1 ;;
 
         *) HUGO_ARGS="$HUGO_ARGS $1";   shift 1 ;;
@@ -43,6 +45,18 @@ while [ -n "$1" ]; do
 done
 
 set -- $HUGO_ARGS
+
+if [ "$upgrade" = true ]; then
+    if [ "$get_latest" = true -o -n "$get_version" ]; then
+        echo "Error: Flag --upgrade cannot be used alongside of --get-version or --get-latest"
+        exit 1
+    fi
+else
+    if [ "$get_latest" = true -a -n "$get_version" ]; then
+        echo "Error: Flags --get-version and --get-latest cannot be used alongside eachother"
+        exit 1
+    fi
+fi
 
 # check which download command (wget or curl) is available.
 DOWNLOAD_COMMAND=""
@@ -58,7 +72,7 @@ elif command -v curl > /dev/null; then
     DOWNLOAD_OUTPUT="-o"
     DOWNLOAD_SILENT="-s"
 else
-    echo "Unable to find 'wget' or 'curl' command."
+    echo "Error: Unable to find 'wget' or 'curl' command."
     exit 1
 fi
 
@@ -89,7 +103,7 @@ case "`uname -m`" in
 esac
 
 if [ -z "$os_type" -o -z "$os_arch" ]; then
-    echo "Unknown OS type or architecture"
+    echo "Error: Unknown OS type or architecture"
     exit 1
 fi
 
@@ -99,7 +113,7 @@ fi
 # ----------------------------------------------------------------------------
 find_basedir() {
     if [ -z "$1" ]; then
-        echo "Path not specified to find_basedir"
+        echo "Error: Path not specified to find_basedir"
         return 1
     fi
 
@@ -119,7 +133,8 @@ find_basedir() {
 
 BASE_DIR=`find_basedir "$(pwd)"`
 if [ -z "$BASE_DIR" ]; then
-    exit 1;
+    echo "Error: Unable to find base directory."
+    exit 1
 fi
 
 if [ ! -d "$BASE_DIR/.hugo" ]; then
@@ -221,6 +236,18 @@ download_version() {
 }
 
 # ----------------------------------------------------------------------------
+# upgrade hugo wrapper binary and save it as ${BASE_DIR}/hugow
+# ----------------------------------------------------------------------------
+if [ "$upgrade" = true ]; then
+    printf "downloading hugow binary ... "
+    $DOWNLOAD_COMMAND $DOWNLOAD_SILENT $DOWNLOAD_OUTPUT "hugow" "https://raw.githubusercontent.com/khos2ow/hugo-wrapper/master/hugow" &
+    wait
+    printf "[done]\n"
+    chmod +x hugow
+    exit
+fi
+
+# ----------------------------------------------------------------------------
 # download hugo binary and save it as ${BASE_DIR}/.hugo/hugo
 # ----------------------------------------------------------------------------
 if [ -r "$BASE_DIR/.hugo/hugo" ]; then
@@ -295,6 +322,7 @@ Complete documentation is available at http://gohugo.io/.
 Flags:
       --get-latest                 get latest version of hugo binary.
       --get-version string         get specified version of hugo binary.
+      --upgrade                    upgrade hugo wrapper binary itself.
   -h, --help                       help for hugo-wrapper
 
 --------
