@@ -10,6 +10,21 @@ In order to use the `hugow` binary, you only need to download it and place it in
 $ curl -o hugow https://raw.githubusercontent.com/khos2ow/hugo-wrapper/master/hugow && chmod +x hugow
 ```
 
+or
+
+```bash
+$ wget -O hugow https://raw.githubusercontent.com/khos2ow/hugo-wrapper/master/hugow && chmod +x hugow
+```
+
+## Upgrade Hugo Wrapper
+
+In order to upgrade `hugow` binary, you can use `--upgrade` flag. The newest version of wrapper binary will be
+downloaded from GitHub repository on your machine and will replace the old one.
+
+```bash
+$ ./hugow --upgrade
+```
+
 ## Hugo Wrapper usage
 
 and use it the same way you'd use Hugo binary itself:
