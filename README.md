@@ -7,7 +7,8 @@ The universal way to include Hugo binary to your project.
 `hugow` is a POSIX-style shell script act as a wrapper of [Hugo](https://gohugo.io/)
 binary which is, in fact, [platform dependent](https://gohugo.io/getting-started/installing/#binary-cross-platform).
 It can be executed in variety of [Operating Systems](#operating-systems) and
-[Command Shells](#command-shells). As a result, `hugow` has a very minimal dependencies:
+[Command Shells](#command-shells). As a result, `hugow` has very minimal number of
+dependencies:
 
 - downloader: `wget` or `curl`
 - checksum: `sha256sum` or `shasum` or `cksum`
