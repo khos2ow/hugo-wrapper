@@ -7,13 +7,13 @@ The universal way to include Hugo binary to your project.
 In order to use the `hugow` binary, you only need to download it and place it in the root of your Hugo project.
 
 ```bash
-$ curl -o hugow https://raw.githubusercontent.com/khos2ow/hugo-wrapper/master/hugow && chmod +x hugow
+curl -o hugow https://raw.githubusercontent.com/khos2ow/hugo-wrapper/master/hugow && chmod +x hugow
 ```
 
 or
 
 ```bash
-$ wget -O hugow https://raw.githubusercontent.com/khos2ow/hugo-wrapper/master/hugow && chmod +x hugow
+wget -O hugow https://raw.githubusercontent.com/khos2ow/hugo-wrapper/master/hugow && chmod +x hugow
 ```
 
 ## Upgrade Hugo Wrapper
@@ -22,7 +22,7 @@ In order to upgrade `hugow` binary, you can use `--upgrade` flag. The newest ver
 downloaded from GitHub repository on your machine and will replace the old one.
 
 ```bash
-$ ./hugow --upgrade
+./hugow --upgrade
 ```
 
 ## Hugo Wrapper usage
@@ -30,9 +30,9 @@ $ ./hugow --upgrade
 and use it the same way you'd use Hugo binary itself:
 
 ```bash
-$ ./hugow          # to build the site
-$ ./hugow server   # to start the server
-$ ./hugow --help   # to show help of both Hugo and Hugo Wrapper
+./hugow          # to build the site
+./hugow server   # to start the server
+./hugow --help   # to show help of both Hugo and Hugo Wrapper
 ```
 
 On the first execution, `hugow` downloads the _latest_ Hugo binary from
@@ -47,8 +47,8 @@ With `hugow` you can download `LATEST` or specific version of Hugo binary, and y
 upgrade or downgrade at any given time.
 
 ```bash
-$ ./hugow --get-latest                    # to get latest Hugo version
-$ ./hugow --get-version <VERSION_NUMBER>  # to get specific Hugo version
+./hugow --get-latest                    # to get latest Hugo version
+./hugow --get-version <VERSION_NUMBER>  # to get specific Hugo version
 ```
 
 ## Content of `.gitignore`
