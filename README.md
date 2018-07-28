@@ -2,9 +2,21 @@
 
 The universal way to include Hugo binary to your project.
 
+## Hugo Wrapper dependencies
+
+`hugow` is a POSIX-style shell script act as a wrapper of [Hugo](https://gohugo.io/)
+binary which is, in fact, [platform dependent](https://gohugo.io/getting-started/installing/#binary-cross-platform).
+It can be executed in variety of [Operating Systems](#operating-systems) and
+[Command Shells](#command-shells). As a result, `hugow` has a very minimal dependencies:
+
+- downloader: `wget` or `curl`
+- checksum: `sha256sum` or `shasum` or `cksum`
+- tarball: `tar`
+
 ## Download Hugo Wrapper
 
-In order to use the `hugow` binary, you only need to download it and place it in the root of your Hugo project.
+In order to use the `hugow` binary, you only need to download it and place it in the root
+of your Hugo project.
 
 ```bash
 curl -o hugow https://raw.githubusercontent.com/khos2ow/hugo-wrapper/master/hugow && chmod +x hugow
@@ -18,8 +30,9 @@ wget -O hugow https://raw.githubusercontent.com/khos2ow/hugo-wrapper/master/hugo
 
 ## Upgrade Hugo Wrapper
 
-In order to upgrade `hugow` binary, you can use `--upgrade` flag. The newest version of wrapper binary will be
-downloaded from GitHub repository on your machine and will replace the old one.
+In order to upgrade `hugow` binary, you can use `--upgrade` flag. The newest version of
+wrapper binary will be downloaded from GitHub repository on your machine and will replace
+the old one.
 
 ```bash
 ./hugow --upgrade
@@ -78,10 +91,22 @@ example `.gitignore` content:
 
 ## Tested on
 
+### Operating Systems
+
 - Ubuntu 18.04, x86_64
 - Ubuntu 17.10, x86_64
 - Debian 9.5, x86_64
 - Mac OS X (TODO)
+
+### Command Shells
+
+- bash
+- sh
+- csh (TODO)
+- tcsh (TODO)
+- scsh (TODO)
+- zsh (TODO)
+- PowerShell (TODO)
 
 ## License
 
