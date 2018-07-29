@@ -163,6 +163,21 @@ parse_json() {
     echo ${temp##*|} | sed "s/${field}: //g"
 }
 
+perform_checksum() {
+    if [ -n "$1" ]; then
+        if command -v sha256sum > /dev/null; then
+            echo "$1" | sha256sum --check > /dev/null
+        elif command -v shasum > /dev/null; then
+            echo "$1" | shasum --algorithm 256 --check > /dev/null
+        elif command -v cksum > /dev/null; then
+            echo "$1" | cksum -a SHA256 -c > /dev/null
+        else
+            echo "Error: cannot find any checksum command"
+            exit 1
+        fi
+    fi
+}
+
 remove_file() {
     if [ -n "$1" -a "$1" != "/" -a -f "$1" -a -r "$1" ] ; then
         rm "$1"
@@ -207,7 +222,7 @@ download_version() {
 
         printf "verifying hugo binary version v${versionToDownload} ..... "
         cd $BASE_DIR/.hugo/
-        grep "${tarballName}" "$BASE_DIR/.hugo/$checksumName" | shasum --algorithm 256 --check > /dev/null
+        grep "${tarballName}" "$BASE_DIR/.hugo/$checksumName" | perform_checksum
         cd - > /dev/null 2>&1
         wait
         printf "[done]\n"
