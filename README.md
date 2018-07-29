@@ -6,8 +6,8 @@ The universal way to include Hugo binary to your project.
 
 `hugow` is a POSIX-style shell script act as a wrapper of [Hugo](https://gohugo.io/)
 binary which is, in fact, [platform dependent](https://gohugo.io/getting-started/installing/#binary-cross-platform).
-It can be executed in variety of [Operating Systems](#operating-systems) and
-[Command Shells](#command-shells). As a result, `hugow` has very minimal number of
+It can be executed in variety of [Operating Systems](#tested-on) and
+[Command Shells](#tested-on). As a result, `hugow` has very minimal number of
 dependencies:
 
 - downloader: `wget` or `curl`
@@ -92,22 +92,25 @@ example `.gitignore` content:
 
 ## Tested on
 
-### Operating Systems
-
-- Ubuntu 18.04, x86_64
-- Ubuntu 17.10, x86_64
-- Debian 9.5, x86_64
-- Mac OS X (TODO)
-
-### Command Shells
-
-- bash
-- sh
-- csh (TODO)
-- tcsh (TODO)
-- scsh (TODO)
-- zsh (TODO)
-- PowerShell (TODO)
+ Operating Systems | Architecture | bash | sh | csh | tcsh | zsh | ksh | PowerShell |
+-------------------|--------------|------|----|-----|------|-----|-----|------------|
+ DragonFloyBSD     | amd64        | -    | -  | -   | -    | -   | -   | -          |
+ FreeBSD           | i386         | -    | -  | -   | -    | -   | -   | -          |
+ FreeBSD           | amd64        | -    | -  | -   | -    | -   | -   | -          |
+ FreeBSD           | ARM          | -    | -  | -   | -    | -   | -   | -          |
+ Linux             | x86          | -    | -  | -   | -    | -   | -   | -          |
+ Linux             | x86_64       | ✔    | ✔  | -   | -    | -   | -   | -          |
+ Linux             | ARM          | -    | -  | -   | -    | -   | -   | -          |
+ Linux             | ARM64        | -    | -  | -   | -    | -   | -   | -          |
+ macOS             | x86          | -    | -  | -   | -    | -   | -   | -          |
+ macOS             | x86_64       | -    | -  | -   | -    | -   | -   | -          |
+ macOS             | ARM          | -    | -  | -   | -    | -   | -   | -          |
+ macOS             | ARM64        | -    | -  | -   | -    | -   | -   | -          |
+ NetBSD            | i386         | -    | -  | -   | -    | -   | -   | -          |
+ NetBSD            | amd64        | -    | -  | -   | -    | -   | -   | -          |
+ NetBSD            | ARM          | -    | -  | -   | -    | -   | -   | -          |
+ OpenBSD           | i386         | -    | -  | -   | -    | -   | -   | -          |
+ OpenBSD           | amd64        | -    | -  | -   | -    | -   | -   | -          |
 
 ## License
 
