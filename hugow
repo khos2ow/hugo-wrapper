@@ -20,6 +20,7 @@
 
 # ----------------------------------------------------------------------------
 # Hugo Wrapper is the universal way to download and exectue Hugo binary
+# https://github.com/khos2ow/hugo-wrapper
 # ----------------------------------------------------------------------------
 
 set -e
