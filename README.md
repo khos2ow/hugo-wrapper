@@ -107,7 +107,7 @@ example `.gitignore` content:
  macOS             | ARM          | -    | -  | -   | -    | -   | -   | -          |
  macOS             | ARM64        | -    | -  | -   | -    | -   | -   | -          |
  NetBSD            | i386         | -    | -  | -   | -    | -   | -   | -          |
- NetBSD            | amd64        | -    | -  | -   | -    | -   | -   | -          |
+ NetBSD            | amd64        | -    | -  | -   | -    | -   | ✔   | -          |
  NetBSD            | ARM          | -    | -  | -   | -    | -   | -   | -          |
  OpenBSD           | i386         | -    | -  | -   | -    | -   | -   | -          |
  OpenBSD           | amd64        | -    | -  | -   | -    | -   | -   | -          |
