@@ -65,6 +65,20 @@ upgrade or downgrade at any given time.
 ./hugow --get-version <VERSION_NUMBER>  # to get specific Hugo version
 ```
 
+## Hugo Wrapper flags
+
+`hugow` supports the following flags and passes through any additional flag directly to
+Hugo binary itself.
+
+```text
+Flags:
+      --get-latest                 get latest version of hugo binary.
+      --get-version string         get specified version of hugo binary.
+      --upgrade                    upgrade hugo wrapper binary itself.
+  -h, --help                       help for hugo-wrapper
+
+```
+
 ## Content of `.gitignore`
 
 `.hugo` folder in `PROJECT_ROOT` which contains downloaded Hugo binary and the `version`
