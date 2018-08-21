@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-# ----------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
 # distributed with this work for additional information
@@ -16,21 +16,22 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-# ----------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
-# ----------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Hugo Wrapper (v1.0.1)
 #
-# Hugo Wrapper is a POSIX-style shell script act as a wrapper to download and
-# execute Hugo binary. It can be executed in variety of Operating Systems and
-# Command Shells. As a result, hugow has very minimal number of dependencies:
+# Hugo Wrapper is a POSIX-style shell script which acts as a wrapper to download
+# and execute Hugo binary for your platform. It  can  be  executed in variety of
+# Operating  Systems  and  Command  Shells. As a  result, hugow has very minimal
+# number of dependencies:
 #
 #  downloader: wget or curl
 #  checksum  : sha256sum or shasum or cksum
 #  tarball   : tar
 #
 # https://github.com/khos2ow/hugo-wrapper
-# ----------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 set -e
 
@@ -124,10 +125,10 @@ if [ -z "$os_type" -o -z "$os_arch" ]; then
     exit 1
 fi
 
-# ----------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # traverses directory structure from process work directory to filesystem root
 # first directory with .hugo subdirectory is considered project base directory
-# ----------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 find_basedir() {
     if [ -z "$1" ]; then
         echo "Error: Path not specified to find_basedir"
@@ -267,17 +268,17 @@ download_version() {
     fi
 }
 
-# ----------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # upgrade hugo wrapper binary and save it as ${BASE_DIR}/hugow
-# ----------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 if [ "$version" = true ]; then
     echo "Hugo Wrapper $VERSION_NUMBER"
     exit
 fi
 
-# ----------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # upgrade hugo wrapper binary and save it as ${BASE_DIR}/hugow
-# ----------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 if [ "$upgrade" = true ]; then
     printf "downloading hugow binary ... "
     $DOWNLOAD_COMMAND $DOWNLOAD_SILENT $DOWNLOAD_REDIRECT $DOWNLOAD_OUTPUT "hugow" "https://raw.githubusercontent.com/khos2ow/hugo-wrapper/master/hugow" &
@@ -287,9 +288,9 @@ if [ "$upgrade" = true ]; then
     exit
 fi
 
-# ----------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # download hugo binary and save it as ${BASE_DIR}/.hugo/hugo
-# ----------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 if [ -r "$BASE_DIR/.hugo/hugo" ]; then
     current_binary_version="$($BASE_DIR/.hugo/hugo version | sed -ne 's/[^0-9]*\(\([0-9]*\.\)\{0,4\}[0-9]*[^.]\).*/\1/p' | sed 's/^ *//;s/ *$//')"
 
@@ -338,17 +339,17 @@ else
     fi
 fi
 
-# ----------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # only download binary and not execute hugo related command
-# ----------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 if [ "$get_latest" = true -o -n "$get_version" ]; then
     ${BASE_DIR}/.hugo/hugo version
     exit
 fi
 
-# ----------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Show help, both from hugow and ${BASE_DIR}/.hugo/hugo
-# ----------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 if [ $show_help = true ]; then
     help=$(${BASE_DIR}/.hugo/hugo --help)
     cat << USAGE
@@ -373,7 +374,7 @@ USAGE
     exit 0
 fi
 
-# ----------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # pass commands and flags to actual hugo binary
-# ----------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ${BASE_DIR}/.hugo/hugo "$@"
