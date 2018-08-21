@@ -19,16 +19,28 @@
 # ----------------------------------------------------------------------------
 
 # ----------------------------------------------------------------------------
-# Hugo Wrapper is the universal way to download and exectue Hugo binary
+# Hugo Wrapper (v1.0.1)
+#
+# Hugo Wrapper is a POSIX-style shell script act as a wrapper to download and
+# execute Hugo binary. It can be executed in variety of Operating Systems and
+# Command Shells. As a result, hugow has very minimal number of dependencies:
+#
+#  downloader: wget or curl
+#  checksum  : sha256sum or shasum or cksum
+#  tarball   : tar
+#
 # https://github.com/khos2ow/hugo-wrapper
 # ----------------------------------------------------------------------------
 
 set -e
 
+VERSION_NUMBER="v1.0.1"
+
 # hugo-wrapper command available flags
 get_version=""
 get_latest=false
 upgrade=false
+version=false
 show_help=false
 
 # hugo related commands to pass through the actual binary
@@ -39,6 +51,7 @@ while [ -n "$1" ]; do
         --get-version) get_version=$2;  shift 2 ;;
         --get-latest)  get_latest=true; shift 1 ;;
         --upgrade)     upgrade=true;    shift 1 ;;
+        --version)     version=true;    shift 1 ;;
         -h | --help)   show_help=true;  shift 1 ;;
 
         *) HUGO_ARGS="$HUGO_ARGS $1";   shift 1 ;;
@@ -257,6 +270,14 @@ download_version() {
 # ----------------------------------------------------------------------------
 # upgrade hugo wrapper binary and save it as ${BASE_DIR}/hugow
 # ----------------------------------------------------------------------------
+if [ "$version" = true ]; then
+    echo "Hugo Wrapper $VERSION_NUMBER"
+    exit
+fi
+
+# ----------------------------------------------------------------------------
+# upgrade hugo wrapper binary and save it as ${BASE_DIR}/hugow
+# ----------------------------------------------------------------------------
 if [ "$upgrade" = true ]; then
     printf "downloading hugow binary ... "
     $DOWNLOAD_COMMAND $DOWNLOAD_SILENT $DOWNLOAD_REDIRECT $DOWNLOAD_OUTPUT "hugow" "https://raw.githubusercontent.com/khos2ow/hugo-wrapper/master/hugow" &
@@ -342,6 +363,7 @@ Flags:
       --get-latest                 get latest version of hugo binary.
       --get-version string         get specified version of hugo binary.
       --upgrade                    upgrade hugo wrapper binary itself.
+      --version                    show version of hugo wrapper binary itself.
   -h, --help                       help for hugo-wrapper
 
 --------
