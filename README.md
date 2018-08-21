@@ -113,11 +113,11 @@ example `.gitignore` content:
  FreeBSD           | amd64        | -    | -  | -   | -    | -   | -   | -          |
  FreeBSD           | ARM          | -    | -  | -   | -    | -   | -   | -          |
  Linux             | x86          | -    | -  | -   | -    | -   | -   | -          |
- Linux             | x86_64       | ✔    | ✔  | -   | -    | -   | -   | -          |
+ Linux             | x86_64       | ✔    | ✔  | ✔   | ✔    | ✔   | ✔   | -          |
  Linux             | ARM          | -    | -  | -   | -    | -   | -   | -          |
  Linux             | ARM64        | -    | -  | -   | -    | -   | -   | -          |
  macOS             | x86          | -    | -  | -   | -    | -   | -   | -          |
- macOS             | x86_64       | -    | -  | -   | -    | -   | -   | -          |
+ macOS             | x86_64       | ✔    | -  | -   | -    | -   | -   | -          |
  macOS             | ARM          | -    | -  | -   | -    | -   | -   | -          |
  macOS             | ARM64        | -    | -  | -   | -    | -   | -   | -          |
  NetBSD            | i386         | -    | -  | -   | -    | -   | -   | -          |
