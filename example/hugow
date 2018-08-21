@@ -63,15 +63,18 @@ fi
 DOWNLOAD_COMMAND=""
 DOWNLOAD_OUTPUT=""
 DOWNLOAD_SILENT=""
+DOWNLOAD_REDIRECT=""
 
 if command -v wget > /dev/null; then
     DOWNLOAD_COMMAND="wget"
     DOWNLOAD_OUTPUT="-O"
     DOWNLOAD_SILENT="-q"
+    DOWNLOAD_REDIRECT=""
 elif command -v curl > /dev/null; then
     DOWNLOAD_COMMAND="curl"
     DOWNLOAD_OUTPUT="-o"
     DOWNLOAD_SILENT="-s"
+    DOWNLOAD_REDIRECT="-L"
 else
     echo "Error: Unable to find 'wget' or 'curl' command."
     exit 1
@@ -190,7 +193,7 @@ download_version() {
 
     if [ -n "$versionToDownload" ]; then
         if [ "$versionToDownload" = "LATEST" ]; then
-            latest_release=`$DOWNLOAD_COMMAND $DOWNLOAD_SILENT ${DOWNLOAD_OUTPUT}- https://api.github.com/repos/gohugoio/hugo/releases/latest`
+            latest_release=`$DOWNLOAD_COMMAND $DOWNLOAD_SILENT $DOWNLOAD_REDIRECT ${DOWNLOAD_OUTPUT}- https://api.github.com/repos/gohugoio/hugo/releases/latest`
             versionToDownload=`parse_json "$latest_release" "tag_name"`
         fi
 
@@ -208,8 +211,8 @@ download_version() {
         local checksumName="checksum.txt"
         local checksumPath="$BASE_DIR/.hugo/${checksumName}"
 
-        $DOWNLOAD_COMMAND $DOWNLOAD_SILENT $DOWNLOAD_OUTPUT "$tarballPath" "$binaryUrl" &
-        $DOWNLOAD_COMMAND $DOWNLOAD_SILENT $DOWNLOAD_OUTPUT "$checksumPath" "$checksumUrl" &
+        $DOWNLOAD_COMMAND $DOWNLOAD_SILENT $DOWNLOAD_REDIRECT $DOWNLOAD_OUTPUT "$tarballPath" "$binaryUrl" &
+        $DOWNLOAD_COMMAND $DOWNLOAD_SILENT $DOWNLOAD_REDIRECT $DOWNLOAD_OUTPUT "$checksumPath" "$checksumUrl" &
         wait
 
         if [ -s "$tarballPath" -a -s "$checksumPath" ]; then
@@ -256,7 +259,7 @@ download_version() {
 # ----------------------------------------------------------------------------
 if [ "$upgrade" = true ]; then
     printf "downloading hugow binary ... "
-    $DOWNLOAD_COMMAND $DOWNLOAD_SILENT $DOWNLOAD_OUTPUT "hugow" "https://raw.githubusercontent.com/khos2ow/hugo-wrapper/master/hugow" &
+    $DOWNLOAD_COMMAND $DOWNLOAD_SILENT $DOWNLOAD_REDIRECT $DOWNLOAD_OUTPUT "hugow" "https://raw.githubusercontent.com/khos2ow/hugo-wrapper/master/hugow" &
     wait
     printf "[done]\n"
     chmod +x hugow
@@ -278,7 +281,7 @@ if [ -r "$BASE_DIR/.hugo/hugo" ]; then
             echo "hugo binary version $get_version already exists"
         fi
      elif [ $get_latest = true ]; then
-        latest_release=`$DOWNLOAD_COMMAND $DOWNLOAD_SILENT ${DOWNLOAD_OUTPUT}- https://api.github.com/repos/gohugoio/hugo/releases/latest`
+        latest_release=`$DOWNLOAD_COMMAND $DOWNLOAD_SILENT $DOWNLOAD_REDIRECT ${DOWNLOAD_OUTPUT}- https://api.github.com/repos/gohugoio/hugo/releases/latest`
         latest_version=`parse_json "$latest_release" "tag_name" | sed -ne 's/[^0-9]*\(\([0-9]*\.\)\{0,4\}[0-9]*[^.]\).*/\1/p'`
 
         if [ "$latest_version" != "$current_binary_version" ]; then
