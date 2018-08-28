@@ -1,14 +1,27 @@
 # Hugo Wrapper
 
-The universal way to include Hugo binary to your project.
-
-## Hugo Wrapper dependencies
-
 `hugow` is a POSIX-style shell script which acts as a wrapper to download and run [Hugo](https://gohugo.io/)
 binary - which is, in fact, [platform dependent](https://gohugo.io/getting-started/installing/#binary-cross-platform) -
 for your platform. It can be executed in variety of [Operating Systems](#tested-on) and
-[Command Shells](#tested-on). As a result, `hugow` has very minimal number of
-dependencies:
+[Command Shells](#tested-on).
+
+## Table of contents
+
+- [Hugo Wrapper dependencies](#hugo-wrapper-dependencies)
+- [Download Hugo Wrapper](#download-hugo-wrapper)
+- [Upgrade Hugo Wrapper](#upgrade-hugo-wrapper)
+- [Hugo Wrapper usage](#hugo-wrapper-usage)
+- [Hugo Wrapper flags](#hugo-wrapper-flags)
+- [Download Hugo binary](#download-hugo-binary)
+  - [Download specific Hugo binary](#download-specific-hugo-binary)
+  - [Download specific Hugo Extended binary](#download-specific-hugo-extended-binary)
+- [Content of `.gitignore`](#content-of-gitignore)
+- [Tested on](#tested-on)
+- [License](#license)
+
+## Hugo Wrapper dependencies
+
+`hugow` has very minimal number of dependencies:
 
 - downloader: `wget` or `curl`
 - checksum: `sha256sum` or `shasum` or `cksum`
@@ -20,13 +33,13 @@ In order to use the `hugow` binary, you only need to download it and place it in
 of your Hugo project.
 
 ```bash
-curl -o hugow https://github.com/khos2ow/hugo-wrapper/releases/download/v1.0.2/hugow && chmod +x hugow
+curl -o hugow https://github.com/khos2ow/hugo-wrapper/releases/download/v1.1.0/hugow && chmod +x hugow
 ```
 
 or
 
 ```bash
-wget -O hugow https://github.com/khos2ow/hugo-wrapper/releases/download/v1.0.2/hugow && chmod +x hugow
+wget -O hugow https://github.com/khos2ow/hugo-wrapper/releases/download/v1.1.0/hugow && chmod +x hugow
 ```
 
 ## Upgrade Hugo Wrapper
@@ -55,16 +68,6 @@ On the first execution, `hugow` downloads the _latest_ Hugo binary from
 `<PROJECT_ROOT>/.hugo/version`. As a result from the second execution forward it will only
 execute the - already downloaded - binary.
 
-## Download specific Hugo version
-
-With `hugow` you can download `LATEST` or specific version of Hugo binary, and you can
-upgrade or downgrade at any given time.
-
-```bash
-./hugow --get-latest                    # to get latest Hugo version
-./hugow --get-version <VERSION_NUMBER>  # to get specific Hugo version
-```
-
 ## Hugo Wrapper flags
 
 `hugow` supports the following flags and passes through any additional flag directly to
@@ -72,11 +75,32 @@ Hugo binary itself.
 
 ```text
 Flags:
-      --get-latest                 get latest version of hugo binary.
-      --get-version string         get specified version of hugo binary.
-      --upgrade                    upgrade hugo wrapper binary itself.
+      --get-extended               get hugo extended binary
+      --get-latest                 get latest version of hugo binary
+      --get-version string         get specified version of hugo binary
+      --upgrade                    upgrade hugo wrapper binary itself
   -h, --help                       help for hugo-wrapper
 
+```
+
+## Download Hugo binary
+
+With `hugow` you can download `LATEST` or specific version of Hugo binary or Hugo Extended
+binary, and you can upgrade or downgrade at any given time.
+
+### Download specific Hugo binary
+
+```bash
+./hugow --get-latest                    # to get latest Hugo version
+./hugow --get-version <VERSION_NUMBER>  # to get specific Hugo version
+```
+
+### Download specific Hugo Extended binary
+
+```bash
+./hugow --get-extended --get-latest                    # to get latest Hugo extended version
+./hugow --get-extended --get-version <VERSION_NUMBER>  # to get specific Hugo extended version
+./hugow --get-version <VERSION_NUMBER>/extended        # to get specific Hugo extended version (alias)
 ```
 
 ## Content of `.gitignore`
@@ -94,7 +118,7 @@ example `.gitignore` content:
 
 But if you need a fine grained control of which version of Hugo is intended to be used
 for your project, or if you need an absolute fixed version of Hugo to be used everywhere
-(on users machine, CI job container, etc) you need to check in the `.hugo/version` into
+(on user machine, CI job container, etc) you need to check in the `.hugo/version` into
 your project repository as well to ensure consistence Hugo version everywhere.
 
 example `.gitignore` content:

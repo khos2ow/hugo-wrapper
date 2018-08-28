@@ -19,7 +19,7 @@
 # ------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------
-# Hugo Wrapper (v1.0.2)
+# Hugo Wrapper (v1.1.0)
 #
 # Hugo Wrapper is a POSIX-style shell script which acts as a wrapper to download
 # and execute Hugo binary for your platform. It  can  be  executed in variety of
@@ -35,11 +35,12 @@
 
 set -e
 
-VERSION_NUMBER="v1.0.2"
+VERSION_NUMBER="v1.1.0"
 
 # hugo-wrapper command available flags
 get_version=""
 get_latest=false
+get_extended=false
 upgrade=false
 version=false
 show_help=false
@@ -49,28 +50,39 @@ HUGO_ARGS=""
 
 while [ -n "$1" ]; do
     case "$1" in
-        --get-version) get_version=$2;  shift 2 ;;
-        --get-latest)  get_latest=true; shift 1 ;;
-        --upgrade)     upgrade=true;    shift 1 ;;
-        --version)     version=true;    shift 1 ;;
-        -h | --help)   show_help=true;  shift 1 ;;
+        --get-version)  get_version=$2;    shift 2 ;;
+        --get-latest)   get_latest=true;   shift 1 ;;
+        --get-extended) get_extended=true; shift 1 ;;
+        --upgrade)      upgrade=true;      shift 1 ;;
+        --version)      version=true;      shift 1 ;;
+        -h | --help)    show_help=true;    shift 1 ;;
 
-        *) HUGO_ARGS="$HUGO_ARGS $1";   shift 1 ;;
+        *) HUGO_ARGS="$HUGO_ARGS $1";      shift 1 ;;
     esac
 done
 
 set -- $HUGO_ARGS
 
 if [ "$upgrade" = true ]; then
-    if [ "$get_latest" = true -o -n "$get_version" ]; then
-        echo "Error: Flag --upgrade cannot be used alongside of --get-version or --get-latest"
+    if [ "$get_extended" = true -o "$get_latest" = true -o -n "$get_version" ]; then
+        echo "Error: Flag --upgrade cannot be used together with --get-extended, --get-version or --get-latest"
         exit 1
     fi
 else
     if [ "$get_latest" = true -a -n "$get_version" ]; then
-        echo "Error: Flags --get-version and --get-latest cannot be used alongside eachother"
+        echo "Error: Flags --get-version and --get-latest cannot be used together"
         exit 1
     fi
+fi
+
+# normalizing get_version
+get_version_base="$(echo "$get_version" | cut -d "/" -f1)"
+get_version_extended="$(echo "$get_version" | cut -d "/" -f2)"
+
+get_version="$get_version_base"
+
+if [ "$get_version_extended" = "extended" ]; then
+    get_extended=true
 fi
 
 # check which download command (wget or curl) is available.
@@ -203,24 +215,33 @@ remove_file() {
 }
 
 download_version() {
-    versionToDownload="$1"
+    local versionToDownload="$1"
+    local isExtended="$2"
 
     if [ -n "$versionToDownload" ]; then
+        local filenamePrefix="hugo"
+        local versionDownloadSuffix=""
+
+        if [ "$isExtended" = true ]; then
+            filenamePrefix="hugo_extended"
+            versionDownloadSuffix="/extended"
+        fi
+
         if [ "$versionToDownload" = "LATEST" ]; then
             latest_release=`$DOWNLOAD_COMMAND $DOWNLOAD_SILENT $DOWNLOAD_REDIRECT ${DOWNLOAD_OUTPUT}- https://api.github.com/repos/gohugoio/hugo/releases/latest`
             versionToDownload=`parse_json "$latest_release" "tag_name"`
         fi
 
         # strip down 'v' from begining of the string if exists
-        versionToDownload=`echo $versionToDownload | sed -ne 's/[^0-9]*\(\([0-9]*\.\)\{0,4\}[0-9]*[^.]\).*/\1/p'`
+        versionToDownload=`echo $versionToDownload | sed -ne 's/[^0-9]*\(\([0-9]*\.\)\{0,4\}[0-9]*\(\/extended\)*\).*/\1/p'`
 
-        printf "downloading hugo binary version v${versionToDownload} ... "
+        printf "downloading hugo binary version v${versionToDownload}${versionDownloadSuffix} ... "
 
         # download for specific OS and architecture
-        local binaryUrl="https://github.com/gohugoio/hugo/releases/download/v${versionToDownload}/hugo_${versionToDownload}_${os_type}-${os_arch}.tar.gz"
-        local checksumUrl="https://github.com/gohugoio/hugo/releases/download/v${versionToDownload}/hugo_${versionToDownload}_checksums.txt"
+        local binaryUrl="https://github.com/gohugoio/hugo/releases/download/v${versionToDownload}/${filenamePrefix}_${versionToDownload}_${os_type}-${os_arch}.tar.gz"
+        local checksumUrl="https://github.com/gohugoio/hugo/releases/download/v${versionToDownload}/${filenamePrefix}_${versionToDownload}_checksums.txt"
 
-        local tarballName="hugo_${versionToDownload}_${os_type}-${os_arch}.tar.gz"
+        local tarballName="${filenamePrefix}_${versionToDownload}_${os_type}-${os_arch}.tar.gz"
         local tarballPath="$BASE_DIR/.hugo/${tarballName}"
         local checksumName="checksum.txt"
         local checksumPath="$BASE_DIR/.hugo/${checksumName}"
@@ -238,14 +259,14 @@ download_version() {
             exit 1
         fi
 
-        printf "verifying hugo binary version v${versionToDownload} ..... "
+        printf "verifying hugo binary version v${versionToDownload}${versionDownloadSuffix} ..... "
         cd $BASE_DIR/.hugo/
         grep "${tarballName}" "$BASE_DIR/.hugo/$checksumName" | perform_checksum
         cd - > /dev/null 2>&1
         wait
         printf "[done]\n"
 
-        printf "unzipping hugo binary version v${versionToDownload} ..... "
+        printf "unzipping hugo binary version v${versionToDownload}${versionDownloadSuffix} ..... "
         if [ -f "${tarballPath}" -a -r "${tarballPath}" ]; then
             tar --directory="$BASE_DIR/.hugo/" -xzf "${tarballPath}" 2>&1
             wait
@@ -258,7 +279,7 @@ download_version() {
         fi
 
         # save the downloaded binary version into $BASE_DIR/.hugo/version
-        echo "$versionToDownload" > $BASE_DIR/.hugo/version
+        echo "${versionToDownload}${versionDownloadSuffix}" > $BASE_DIR/.hugo/version
 
         # cleanup after extraction
         remove_file "$checksumPath"
@@ -296,32 +317,47 @@ fi
 # download hugo binary and save it as ${BASE_DIR}/.hugo/hugo
 # ------------------------------------------------------------------------------
 if [ -r "$BASE_DIR/.hugo/hugo" ]; then
-    current_binary_version="$($BASE_DIR/.hugo/hugo version | sed -ne 's/[^0-9]*\(\([0-9]*\.\)\{0,4\}[0-9]*[^.]\).*/\1/p' | sed 's/^ *//;s/ *$//')"
+    current_binary_version="$($BASE_DIR/.hugo/hugo version | sed -ne 's/[^0-9]*\(\([0-9]*\.\)\{0,4\}[0-9]*\(\/extended\)*\).*/\1/p' | sed 's/^ *//;s/ *$//')"
+
+    if [ "$get_extended" = true ]; then
+        suffix_extended_version="/extended"
+    fi
 
     # download hugo binary and save it as ${BASE_DIR}/.hugo/hugo
     if [ -n "$get_version" ]; then
-        if [ "$get_version" != "$current_binary_version" ]; then
+        if [ "${get_version}${suffix_extended_version}" != "$current_binary_version" ]; then
             # specified hugo version
-            download_version "$get_version"
+            download_version "$get_version" $get_extended
         else
-            echo "hugo binary version $get_version already exists"
+            echo "hugo binary version ${get_version}${suffix_extended_version} already exists"
+            echo "${get_version}${suffix_extended_version}" > $BASE_DIR/.hugo/version
         fi
      elif [ $get_latest = true ]; then
         latest_release=`$DOWNLOAD_COMMAND $DOWNLOAD_SILENT $DOWNLOAD_REDIRECT ${DOWNLOAD_OUTPUT}- https://api.github.com/repos/gohugoio/hugo/releases/latest`
-        latest_version=`parse_json "$latest_release" "tag_name" | sed -ne 's/[^0-9]*\(\([0-9]*\.\)\{0,4\}[0-9]*[^.]\).*/\1/p'`
+        latest_version=`parse_json "$latest_release" "tag_name" | sed -ne 's/[^0-9]*\(\([0-9]*\.\)\{0,4\}[0-9]*\(\/extended\)*\).*/\1/p'`
 
-        if [ "$latest_version" != "$current_binary_version" ]; then
+        if [ "${latest_version}${suffix_extended_version}" != "$current_binary_version" ]; then
             # latest hugo version
-            download_version "$latest_version"
+            download_version "$latest_version" $get_extended
         else
-            echo "latest hugo binary version $latest_version already exists"
+            echo "latest hugo binary version ${latest_version}${suffix_extended_version} already exists"
+            echo "${latest_version}${suffix_extended_version}" > $BASE_DIR/.hugo/version
         fi
     elif [ -r "$BASE_DIR/.hugo/version" ]; then
         current_file_version="$(cat "$BASE_DIR/.hugo/version")"
 
         if [ "$current_file_version" != "$current_binary_version" ]; then
+            version_from_file="$(echo "$current_file_version" | cut -d "/" -f1)"
+            extended_from_file="$(echo "$current_file_version" | cut -d "/" -f2)"
+
+            if [ "${extended_from_file}" = "extended" ]; then
+                isExtended=true
+            else
+                isExtended=false
+            fi
+
             # specified hugo version
-            download_version "$current_file_version"
+            download_version "$version_from_file" $isExtended
         fi
     else
         # save the current binary version into $BASE_DIR/.hugo/version
@@ -330,16 +366,25 @@ if [ -r "$BASE_DIR/.hugo/hugo" ]; then
 else
     if [ -n "$get_version" ]; then
         # specified hugo version
-        download_version "$get_version"
+        download_version "$get_version" $get_extended
     elif [ $get_latest = true ]; then
         # latest hugo version
-        download_version "LATEST"
+        download_version "LATEST" $get_extended
     elif [ -r "$BASE_DIR/.hugo/version" ]; then
         # specified hugo version
-        download_version "$(cat "$BASE_DIR/.hugo/version")"
+        version_from_file="$(cat "$BASE_DIR/.hugo/version" | cut -d "/" -f1)"
+        extended_from_file="$(cat "$BASE_DIR/.hugo/version" | cut -d "/" -f2)"
+
+        if [ "${extended_from_file}" = "extended" ]; then
+            isExtended=true
+        else
+            isExtended=false
+        fi
+
+        download_version "${version_from_file}" $isExtended
     else
         # latest hugo version
-        download_version "LATEST"
+        download_version "LATEST" $get_extended
     fi
 fi
 
@@ -365,10 +410,11 @@ built with love by spf13 and friends in Go.
 Complete documentation is available at http://gohugo.io/.
 
 Flags:
-      --get-latest                 get latest version of hugo binary.
-      --get-version string         get specified version of hugo binary.
-      --upgrade                    upgrade hugo wrapper binary itself.
-      --version                    show version of hugo wrapper binary itself.
+      --get-extended               get hugo extended binary
+      --get-latest                 get latest version of hugo binary
+      --get-version string         get specified version of hugo binary
+      --upgrade                    upgrade hugo wrapper binary itself
+      --version                    show version of hugo wrapper binary itself
   -h, --help                       help for hugo-wrapper
 
 --------
