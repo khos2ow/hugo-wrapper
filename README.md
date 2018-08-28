@@ -33,7 +33,7 @@ In order to use the `hugow` binary, you only need to download it and place it in
 of your Hugo project.
 
 ```bash
-curl -o hugow https://github.com/khos2ow/hugo-wrapper/releases/download/v1.1.0/hugow && chmod +x hugow
+curl -L -o hugow https://github.com/khos2ow/hugo-wrapper/releases/download/v1.1.0/hugow && chmod +x hugow
 ```
 
 or
