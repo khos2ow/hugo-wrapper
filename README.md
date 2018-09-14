@@ -136,7 +136,7 @@ example `.gitignore` content:
  FreeBSD           | i386         | -    | -  | -   | -    | -   | -   | -          |
  FreeBSD           | amd64        | ✔    | ✔  | ✔   | ✔    | ✔   | -   | -          |
  FreeBSD           | ARM          | -    | -  | -   | -    | -   | -   | -          |
- Linux             | x86          | -    | -  | -   | -    | -   | -   | -          |
+ Linux             | x86          | ✔    | ✔  | ✔   | ✔    | ✔   | ✔   | -          |
  Linux             | x86_64       | ✔    | ✔  | ✔   | ✔    | ✔   | ✔   | -          |
  Linux             | ARM          | -    | -  | -   | -    | -   | -   | -          |
  Linux             | ARM64        | -    | -  | -   | -    | -   | -   | -          |
