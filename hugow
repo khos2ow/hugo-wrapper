@@ -125,7 +125,7 @@ esac
 os_arch=""
 
 case "`uname -m`" in
-    x86)      os_arch="32bit" ;;
+    i686 | x86)      os_arch="32bit" ;;
     x86_64)   os_arch="64bit" ;;
     amd64)    os_arch="64bit" ;;
     armv7l)   os_arch="ARM" ;;
