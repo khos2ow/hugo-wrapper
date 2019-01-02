@@ -317,7 +317,7 @@ fi
 # download hugo binary and save it as ${BASE_DIR}/.hugo/hugo
 # ------------------------------------------------------------------------------
 if [ -r "$BASE_DIR/.hugo/hugo" ]; then
-    current_binary_version="$($BASE_DIR/.hugo/hugo version | sed -ne 's/[^0-9]*\(\([0-9]*\.\)\{0,4\}[0-9]*\(\/extended\)*\).*/\1/p' | sed 's/^ *//;s/ *$//')"
+    current_binary_version="$($BASE_DIR/.hugo/hugo version | sed -ne 's/[^0-9]*\(\([0-9]*\.\)\{0,4\}[0-9]*\(-[0-9a-fA-F]*\)*\(\/extended\)*\).*/\1/p' | sed 's/-[0-9A-Fa-f]*//p' | sed 's/^ *//;s/ *$//' | uniq)"
 
     if [ "$get_extended" = true ]; then
         suffix_extended_version="/extended"
