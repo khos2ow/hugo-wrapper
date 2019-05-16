@@ -83,6 +83,18 @@ Flags:
 
 ```
 
+## Hugo Wrapper CI/CD
+
+Most Continuous delivery platforms need a silent build command that will produce valid exit codes. Here are some examples of using `hugow` in the wild.
+
+### Netlify
+
+Netlify will need permission to use `hugow` and run the build
+
+```bash
+chmod a+x ./hugow && ./hugow --gc --minify --quiet
+```
+
 ## Download Hugo binary
 
 With `hugow` you can download `LATEST` or specific version of Hugo binary or Hugo Extended
