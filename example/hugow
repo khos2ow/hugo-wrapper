@@ -219,10 +219,17 @@ download_version() {
     local isExtended="$2"
 
     if [ -n "$versionToDownload" ]; then
+        local majorVersion=`echo ${versionToDownload} | cut -d. -f1`
+        local minorVersion=`echo ${versionToDownload} | cut -d. -f2`
         local filenamePrefix="hugo"
+        local checksumFilenamePrefix="${filenamePrefix}"
         local versionDownloadSuffix=""
 
         if [ "$isExtended" = true ]; then
+            if [ "$majorVersion" -eq 0 -a "$minorVersion" -lt 56 ] ; then
+                checksumFilenamePrefix="hugo_extended"
+            fi
+
             filenamePrefix="hugo_extended"
             versionDownloadSuffix="/extended"
         fi
@@ -239,7 +246,7 @@ download_version() {
 
         # download for specific OS and architecture
         local binaryUrl="https://github.com/gohugoio/hugo/releases/download/v${versionToDownload}/${filenamePrefix}_${versionToDownload}_${os_type}-${os_arch}.tar.gz"
-        local checksumUrl="https://github.com/gohugoio/hugo/releases/download/v${versionToDownload}/${filenamePrefix}_${versionToDownload}_checksums.txt"
+        local checksumUrl="https://github.com/gohugoio/hugo/releases/download/v${versionToDownload}/${checksumFilenamePrefix}_${versionToDownload}_checksums.txt"
 
         local tarballName="${filenamePrefix}_${versionToDownload}_${os_type}-${os_arch}.tar.gz"
         local tarballPath="$BASE_DIR/.hugo/${tarballName}"

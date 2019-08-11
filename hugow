@@ -219,15 +219,14 @@ download_version() {
     local isExtended="$2"
 
     if [ -n "$versionToDownload" ]; then
-        local versionToDownloadArray=(${versionToDownload//./ })
-        local majorVersion="${versionToDownloadArray[0]}"
-        local minorVersion="${versionToDownloadArray[1]}"
+        local majorVersion=`echo ${versionToDownload} | cut -d. -f1`
+        local minorVersion=`echo ${versionToDownload} | cut -d. -f2`
         local filenamePrefix="hugo"
         local checksumFilenamePrefix="${filenamePrefix}"
         local versionDownloadSuffix=""
 
         if [ "$isExtended" = true ]; then
-            if (( "$majorVersion" == 0  &&  "$minorVersion" <= 55 )) ; then
+            if [ "$majorVersion" -eq 0 -a "$minorVersion" -lt 56 ] ; then
                 checksumFilenamePrefix="hugo_extended"
             fi
 
