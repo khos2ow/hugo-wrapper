@@ -188,9 +188,9 @@ parse_json() {
         echo ""
     fi
 
-    temp=`echo $json | sed 's/\\\\\//\//g' | sed 's/[{}]//g' | awk -v k="text" '{n=split($0,a,","); for (i=1; i<=n; i++) print a[i]}' | sed 's/\"\:\"/\|/g' | sed 's/[\,]/ /g' | sed 's/\"//g' | grep -w $field`
+    temp=`echo "$json" | sed 's/\\\\\//\//g' | sed 's/[{}]//g' | awk -v k="text" '{n=split($0,a,","); for (i=1; i<=n; i++) print a[i]}' | sed 's/\"\:\"/\|/g' | sed 's/[\,]/ /g' | sed 's/\"//g' | grep -w "$field"`
 
-    echo ${temp##*|} | sed "s/${field}: //g"
+    echo "${temp##*|}" | sed "s/${field}: //g"
 }
 
 perform_checksum() {
@@ -219,8 +219,8 @@ download_version() {
     local isExtended="$2"
 
     if [ -n "$versionToDownload" ]; then
-        local majorVersion=`echo ${versionToDownload} | cut -d. -f1`
-        local minorVersion=`echo ${versionToDownload} | cut -d. -f2`
+        local majorVersion=`echo "${versionToDownload}" | cut -d. -f1`
+        local minorVersion=`echo "${versionToDownload}" | cut -d. -f2`
         local filenamePrefix="hugo"
         local checksumFilenamePrefix="${filenamePrefix}"
         local versionDownloadSuffix=""
@@ -240,7 +240,7 @@ download_version() {
         fi
 
         # strip down 'v' from begining of the string if exists
-        versionToDownload=`echo $versionToDownload | sed -ne 's/[^0-9]*\(\([0-9]*\.\)\{0,4\}[0-9]*\(\/extended\)*\).*/\1/p'`
+        versionToDownload=`echo "$versionToDownload" | sed -ne 's/[^0-9]*\(\([0-9]*\.\)\{0,4\}[0-9]*\(\/extended\)*\).*/\1/p'`
 
         printf "downloading hugo binary version v${versionToDownload}${versionDownloadSuffix} ... "
 
@@ -267,7 +267,7 @@ download_version() {
         fi
 
         printf "verifying hugo binary version v${versionToDownload}${versionDownloadSuffix} ..... "
-        cd $BASE_DIR/.hugo/
+        cd "$BASE_DIR/.hugo/"
         grep "${tarballName}" "$BASE_DIR/.hugo/$checksumName" | perform_checksum
         cd - > /dev/null 2>&1
         wait
@@ -286,7 +286,7 @@ download_version() {
         fi
 
         # save the downloaded binary version into $BASE_DIR/.hugo/version
-        echo "${versionToDownload}${versionDownloadSuffix}" > $BASE_DIR/.hugo/version
+        echo "${versionToDownload}${versionDownloadSuffix}" > "$BASE_DIR/.hugo/version"
 
         # cleanup after extraction
         remove_file "$checksumPath"
@@ -324,7 +324,7 @@ fi
 # download hugo binary and save it as ${BASE_DIR}/.hugo/hugo
 # ------------------------------------------------------------------------------
 if [ -r "$BASE_DIR/.hugo/hugo" ]; then
-    current_binary_version="$($BASE_DIR/.hugo/hugo version | sed -ne 's/[^0-9]*\(\([0-9]*\.\)\{0,4\}[0-9]*\(-[0-9a-fA-F]*\)*\(\/extended\)*\).*/\1/p' | sed 's/-[0-9A-Fa-f]*//p' | sed 's/^ *//;s/ *$//' | uniq)"
+    current_binary_version=$("$BASE_DIR/.hugo/hugo" version | sed -ne 's/[^0-9]*\(\([0-9]*\.\)\{0,4\}[0-9]*\(-[0-9a-fA-F]*\)*\(\/extended\)*\).*/\1/p' | sed 's/-[0-9A-Fa-f]*//p' | sed 's/^ *//;s/ *$//' | uniq)
 
     if [ "$get_extended" = true ]; then
         suffix_extended_version="/extended"
@@ -337,7 +337,7 @@ if [ -r "$BASE_DIR/.hugo/hugo" ]; then
             download_version "$get_version" $get_extended
         else
             echo "hugo binary version ${get_version}${suffix_extended_version} already exists"
-            echo "${get_version}${suffix_extended_version}" > $BASE_DIR/.hugo/version
+            echo "${get_version}${suffix_extended_version}" > "$BASE_DIR/.hugo/version"
         fi
      elif [ $get_latest = true ]; then
         latest_release=`$DOWNLOAD_COMMAND $DOWNLOAD_SILENT $DOWNLOAD_REDIRECT ${DOWNLOAD_OUTPUT}- https://api.github.com/repos/gohugoio/hugo/releases/latest`
@@ -348,7 +348,7 @@ if [ -r "$BASE_DIR/.hugo/hugo" ]; then
             download_version "$latest_version" $get_extended
         else
             echo "latest hugo binary version ${latest_version}${suffix_extended_version} already exists"
-            echo "${latest_version}${suffix_extended_version}" > $BASE_DIR/.hugo/version
+            echo "${latest_version}${suffix_extended_version}" > "$BASE_DIR/.hugo/version"
         fi
     elif [ -r "$BASE_DIR/.hugo/version" ]; then
         current_file_version="$(cat "$BASE_DIR/.hugo/version")"
@@ -368,7 +368,7 @@ if [ -r "$BASE_DIR/.hugo/hugo" ]; then
         fi
     else
         # save the current binary version into $BASE_DIR/.hugo/version
-        echo "$current_binary_version" > $BASE_DIR/.hugo/version
+        echo "$current_binary_version" > "$BASE_DIR/.hugo/version"
     fi
 else
     if [ -n "$get_version" ]; then
@@ -399,7 +399,7 @@ fi
 # only download binary and not execute hugo related command
 # ------------------------------------------------------------------------------
 if [ "$get_latest" = true -o -n "$get_version" ]; then
-    ${BASE_DIR}/.hugo/hugo version
+    "${BASE_DIR}/.hugo/hugo" version
     exit
 fi
 
@@ -407,7 +407,7 @@ fi
 # Show help, both from hugow and ${BASE_DIR}/.hugo/hugo
 # ------------------------------------------------------------------------------
 if [ $show_help = true ]; then
-    help=$(${BASE_DIR}/.hugo/hugo --help)
+    help=$("${BASE_DIR}/.hugo/hugo" --help)
     cat << USAGE
 hugow is the universal wrapper for hugo main command.
 
@@ -434,4 +434,4 @@ fi
 # ------------------------------------------------------------------------------
 # pass commands and flags to actual hugo binary
 # ------------------------------------------------------------------------------
-${BASE_DIR}/.hugo/hugo "$@"
+"${BASE_DIR}/.hugo/hugo" "$@"
