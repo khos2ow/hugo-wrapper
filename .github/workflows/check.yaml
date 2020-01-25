@@ -11,5 +11,8 @@ jobs:
     name: ShellCheck
     runs-on: ubuntu-latest
     steps:
+    - name: Check out code into directory
+      uses: actions/checkout@v1
+
     - name: Run ShellCheck
       run: make check
