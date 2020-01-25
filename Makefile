@@ -8,6 +8,8 @@ URL         := https://github.com/khos2ow/hugo-wrapper
 COMMIT_HASH ?= $(shell git rev-parse --short HEAD 2>/dev/null)
 TAG_VERSION ?= $(shell git describe --tags --exact-match 2>/dev/null || git describe --tags 2>/dev/null || echo "v0.0.1-$(COMMIT_HASH)")
 
+HUGOW_SCRIPT := hugow
+
 .PHONY: all
 all: check
 
@@ -17,7 +19,27 @@ all: check
 .PHONY: check
 check: ## Run ShellCheck
 	@ $(MAKE) --no-print-directory log-$@
-	shellcheck hugow
+	@ $(MAKE) --no-print-directory check-sh check-bash check-dash check-ksh
+
+.PHONY: check-sh
+check-sh: ## Run ShellCheck for sh
+	@ $(MAKE) --no-print-directory log-$@
+	shellcheck --shell sh $(HUGOW_SCRIPT)
+
+.PHONY: check-bash
+check-bash: ## Run ShellCheck for bash
+	@ $(MAKE) --no-print-directory log-$@
+	shellcheck --shell bash $(HUGOW_SCRIPT)
+
+.PHONY: check-dash
+check-dash: ## Run ShellCheck for dash
+	@ $(MAKE) --no-print-directory log-$@
+	shellcheck --shell dash $(HUGOW_SCRIPT)
+
+.PHONY: check-ksh
+check-ksh: ## Run ShellCheck for ksh
+	@ $(MAKE) --no-print-directory log-$@
+	shellcheck --shell ksh $(HUGOW_SCRIPT)
 
 #####################
 ## Release targets ##
