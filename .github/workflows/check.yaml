@@ -7,12 +7,70 @@ on:
   pull_request:
 
 jobs:
-  Check:
-    name: ShellCheck
+  sh:
+    name: sh
     runs-on: ubuntu-latest
     steps:
     - name: Check out code into directory
       uses: actions/checkout@v1
 
-    - name: Run ShellCheck
-      run: make check
+    - name: Download ShellCheck
+      run: |
+        wget https://storage.googleapis.com/shellcheck/shellcheck-stable.linux.x86_64.tar.xz
+        tar xf shellcheck-stable.linux.x86_64.tar.xz
+        sudo mv ./shellcheck-stable/shellcheck /usr/local/bin
+        shellcheck --version
+
+    - name: Run ShellCheck for 'sh'
+      run: make check-sh
+
+  bash:
+    name: bash
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code into directory
+      uses: actions/checkout@v1
+
+    - name: Download ShellCheck
+      run: |
+        wget https://storage.googleapis.com/shellcheck/shellcheck-stable.linux.x86_64.tar.xz
+        tar xf shellcheck-stable.linux.x86_64.tar.xz
+        sudo mv ./shellcheck-stable/shellcheck /usr/local/bin
+        shellcheck --version
+
+    - name: Run ShellCheck for 'bash'
+      run: make check-bash
+
+  dash:
+    name: dash
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code into directory
+      uses: actions/checkout@v1
+
+    - name: Download ShellCheck
+      run: |
+        wget https://storage.googleapis.com/shellcheck/shellcheck-stable.linux.x86_64.tar.xz
+        tar xf shellcheck-stable.linux.x86_64.tar.xz
+        sudo mv ./shellcheck-stable/shellcheck /usr/local/bin
+        shellcheck --version
+
+    - name: Run ShellCheck for 'dash'
+      run: make check-dash
+
+  ksh:
+    name: ksh
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code into directory
+      uses: actions/checkout@v1
+
+    - name: Download ShellCheck
+      run: |
+        wget https://storage.googleapis.com/shellcheck/shellcheck-stable.linux.x86_64.tar.xz
+        tar xf shellcheck-stable.linux.x86_64.tar.xz
+        sudo mv ./shellcheck-stable/shellcheck /usr/local/bin
+        shellcheck --version
+
+    - name: Run ShellCheck for 'ksh'
+      run: make check-ksh
