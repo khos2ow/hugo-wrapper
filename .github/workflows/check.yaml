@@ -7,8 +7,8 @@ on:
   pull_request:
 
 jobs:
-  Check:
-    name: ShellCheck
+  sh:
+    name: sh
     runs-on: ubuntu-latest
     steps:
     - name: Check out code into directory
@@ -20,11 +20,41 @@ jobs:
     - name: Run ShellCheck for 'sh'
       run: make check-sh
 
+  bash:
+    name: bash
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code into directory
+      uses: actions/checkout@v1
+
+    - name: ShellCheck version
+      run: shellcheck --version
+
     - name: Run ShellCheck for 'bash'
       run: make check-bash
 
+  dash:
+    name: dash
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code into directory
+      uses: actions/checkout@v1
+
+    - name: ShellCheck version
+      run: shellcheck --version
+
     - name: Run ShellCheck for 'dash'
       run: make check-dash
+
+  ksh:
+    name: ksh
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code into directory
+      uses: actions/checkout@v1
+
+    - name: ShellCheck version
+      run: shellcheck --version
 
     - name: Run ShellCheck for 'ksh'
       run: make check-ksh
