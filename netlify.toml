@@ -1,0 +1,12 @@
+# netlify configuration
+[build]
+  base = "example/"
+  publish = "example/public/"
+  command = "./hugow"
+
+[context.production.environment]
+  # this controls our robots.txt
+  HUGO_ENV = "production"
+
+[context.deploy-preview]
+  command = "./hugow --buildFuture --baseURL $DEPLOY_PRIME_URL"
