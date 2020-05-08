@@ -250,7 +250,7 @@ download_version() {
         versionDownloadSuffix=""
 
         if [ "$isExtended" = true ]; then
-            if [ "$majorVersion" -eq 0 ] && [ "$minorVersion" -lt 56 ]; then
+            if [ "$versionToDownload" != "LATEST" ] && [ "$majorVersion" -eq 0 ] && [ "$minorVersion" -lt 56 ]; then
                 checksumFilenamePrefix="hugo_extended"
             fi
 
