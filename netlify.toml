@@ -1,7 +1,7 @@
 # netlify configuration
 [build]
   base = "example/"
-  publish = "example/public/"
+  publish = "public/"
   command = "./hugow"
 
 [context.production.environment]
@@ -9,4 +9,4 @@
   HUGO_ENV = "production"
 
 [context.deploy-preview]
-  command = "./hugow --buildFuture --baseURL $DEPLOY_PRIME_URL"
+  command = "./hugow --buildFuture --baseURL $DEPLOY_PRIME_URL/"
