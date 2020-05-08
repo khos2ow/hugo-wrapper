@@ -82,6 +82,7 @@ while [ -n "$1" ]; do
     esac
 done
 
+# shellcheck disable=SC2086
 set -- $HUGO_ARGS
 
 if [ "$upgrade" = true ]; then
