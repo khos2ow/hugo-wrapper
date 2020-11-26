@@ -221,7 +221,7 @@ parse_json() {
 perform_checksum() {
     if [ -n "$1" ]; then
         if command -v sha256sum >/dev/null; then
-            echo "$1" | sha256sum --check >/dev/null
+            echo "$1" | sha256sum -c >/dev/null
         elif command -v shasum >/dev/null; then
             echo "$1" | shasum --algorithm 256 --check >/dev/null
         elif command -v cksum >/dev/null; then
