@@ -15,11 +15,7 @@ jobs:
       uses: actions/checkout@v1
 
     - name: Download ShellCheck
-      run: |
-        wget https://storage.googleapis.com/shellcheck/shellcheck-stable.linux.x86_64.tar.xz
-        tar xf shellcheck-stable.linux.x86_64.tar.xz
-        sudo mv ./shellcheck-stable/shellcheck /usr/local/bin
-        shellcheck --version
+      run: ./scripts/shellcheck-install.sh
 
     - name: Run ShellCheck for 'sh'
       run: make check-sh
@@ -32,11 +28,7 @@ jobs:
       uses: actions/checkout@v1
 
     - name: Download ShellCheck
-      run: |
-        wget https://storage.googleapis.com/shellcheck/shellcheck-stable.linux.x86_64.tar.xz
-        tar xf shellcheck-stable.linux.x86_64.tar.xz
-        sudo mv ./shellcheck-stable/shellcheck /usr/local/bin
-        shellcheck --version
+      run: ./scripts/shellcheck-install.sh
 
     - name: Run ShellCheck for 'bash'
       run: make check-bash
@@ -49,11 +41,7 @@ jobs:
       uses: actions/checkout@v1
 
     - name: Download ShellCheck
-      run: |
-        wget https://storage.googleapis.com/shellcheck/shellcheck-stable.linux.x86_64.tar.xz
-        tar xf shellcheck-stable.linux.x86_64.tar.xz
-        sudo mv ./shellcheck-stable/shellcheck /usr/local/bin
-        shellcheck --version
+      run: ./scripts/shellcheck-install.sh
 
     - name: Run ShellCheck for 'dash'
       run: make check-dash
@@ -66,11 +54,7 @@ jobs:
       uses: actions/checkout@v1
 
     - name: Download ShellCheck
-      run: |
-        wget https://storage.googleapis.com/shellcheck/shellcheck-stable.linux.x86_64.tar.xz
-        tar xf shellcheck-stable.linux.x86_64.tar.xz
-        sudo mv ./shellcheck-stable/shellcheck /usr/local/bin
-        shellcheck --version
+      run: ./scripts/shellcheck-install.sh
 
     - name: Run ShellCheck for 'ksh'
       run: make check-ksh
