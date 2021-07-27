@@ -152,6 +152,7 @@ x86_64) os_arch="64bit" ;;
 amd64) os_arch="64bit" ;;
 armv7l) os_arch="ARM" ;;
 armv8) os_arch="ARM64" ;;
+arm64) os_arch="ARM64" ;;
 esac
 
 if [ -z "$os_type" ] || [ -z "$os_arch" ]; then
