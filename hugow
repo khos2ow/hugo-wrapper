@@ -260,6 +260,14 @@ download_version() {
             versionDownloadSuffix="/extended"
         fi
 
+        if [ "$os_type" = "macOS" ]; then
+            if [ "$versionToDownload" = "LATEST" ]; then
+                os_arch="universal"
+            elif [ "$majorVersion" -ge 0 ] && [ "$minorVersion" -ge 102 ]; then
+                os_arch="universal"
+            fi
+        fi
+
         if [ "$versionToDownload" = "LATEST" ]; then
             latest_release=$($DOWNLOAD_COMMAND $DOWNLOAD_SILENT $DOWNLOAD_REDIRECT ${DOWNLOAD_OUTPUT}- https://api.github.com/repos/gohugoio/hugo/releases/latest)
             versionToDownload=$(parse_json "$latest_release" "tag_name")
