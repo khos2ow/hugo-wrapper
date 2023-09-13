@@ -132,7 +132,7 @@ fi
 os_type=""
 
 case "$(uname -s)" in
-Darwin) os_type="macOS" ;;
+Darwin) os_type="Darwin" ;;
 Linux) os_type="Linux" ;;
 DragonFly) os_type="DragonFlyBSD" ;;
 FreeBSD) os_type="FreeBSD" ;;
@@ -146,14 +146,18 @@ esac
 # OS architecture
 os_arch=""
 
-case "$(uname -m)" in
-x86) os_arch="32bit" ;;
-x86_64) os_arch="64bit" ;;
-amd64) os_arch="64bit" ;;
-armv7l) os_arch="ARM" ;;
-armv8) os_arch="ARM64" ;;
-arm64) os_arch="ARM64" ;;
-esac
+if [ "$os_type" = "Darwin" ]; then
+    os_arch="Universal"
+else
+    case "$(uname -m)" in
+    x86) os_arch="32bit" ;;
+    x86_64) os_arch="64bit" ;;
+    amd64) os_arch="64bit" ;;
+    armv7l) os_arch="ARM" ;;
+    armv8) os_arch="ARM64" ;;
+    arm64) os_arch="ARM64" ;;
+    esac
+fi
 
 if [ -z "$os_type" ] || [ -z "$os_arch" ]; then
     echo "Error: Unknown OS type or architecture"
